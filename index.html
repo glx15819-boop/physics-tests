@@ -1,0 +1,40 @@
+---
+layout: null
+---
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Физика с репетитором</title>
+<link rel="stylesheet" href="style.css">
+<script src="catalog.js" defer></script>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="./"><span aria-hidden="true">φ</span> Физика с репетитором</a></div></header>
+<main class="wrap">
+<h1>Тесты по физике</h1>
+<p class="intro">Выберите тест, который вам назначили.</p>
+<div class="filters" hidden>
+<label>Тема<select id="topic"><option value="">Все темы</option></select></label>
+<label>Группа<select id="group"><option value="">Все группы</option></select></label>
+</div>
+<div class="cards">
+{% assign files = site.static_files | sort: "path" %}
+{% for file in files %}
+  {% assign parts = file.path | split: "/" %}
+  {% if parts[1] == "tests" and parts.size == 5 and file.extname == ".html" %}
+    {% assign topic = parts[2] %}
+    {% assign group = parts[3] %}
+    <article data-topic="{{ topic | escape }}" data-group="{{ group | escape }}">
+      <p class="meta">{{ topic | escape }} · {{ group | escape }}</p>
+      <h2>{{ file.basename | escape }}</h2>
+      <a class="button" href="{{ file.path | uri_escape | relative_url }}">Открыть тест</a>
+    </article>
+  {% endif %}
+{% endfor %}
+</div>
+<p id="empty" role="status" hidden>По этим фильтрам тестов нет.</p>
+</main>
+</body>
+</html>
